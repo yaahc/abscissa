@@ -50,6 +50,7 @@ impl Application for CliApplication {
         self.state.components.register(components)
     }
 
+    #[allow(unused_variables)]
     fn after_config(
         &mut self,
         config: Self::Cfg,

@@ -7,7 +7,6 @@ use tracing_subscriber::{fmt::Formatter, reload::Handle, EnvFilter, FmtSubscribe
 
 use super::config::Config;
 use crate::{terminal::ColorChoice, Component, FrameworkError, FrameworkErrorKind};
-use std::convert::TryFrom;
 
 /// Abscissa component for initializing the `tracing` subsystem
 #[derive(Component, Debug)]
@@ -61,12 +60,8 @@ impl Tracing {
     }
 }
 
-impl TryFrom<Handle<EnvFilter, Formatter>> for Tracing {
-    type Error = FrameworkError;
-
-    fn try_from(filter_handle: Handle<EnvFilter, Formatter>) -> Result<Self, Self::Error> {
-        LogTracer::init().map_err(|e| FrameworkErrorKind::ComponentError.context(e))?;
-
-        Ok(Self { filter_handle })
+impl From<Handle<EnvFilter, Formatter>> for Tracing {
+    fn from(filter_handle: Handle<EnvFilter, Formatter>) -> Self {
+        Self { filter_handle }
     }
 }
