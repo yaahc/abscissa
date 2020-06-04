@@ -50,7 +50,11 @@ impl Application for CliApplication {
         self.state.components.register(components)
     }
 
-    fn after_config(&mut self, config: Self::Cfg) -> Result<(), FrameworkError> {
+    fn after_config(
+        &mut self,
+        config: Self::Cfg,
+        command: &Self::Cmd,
+    ) -> Result<(), FrameworkError> {
         self.state.components.after_config(&config)?;
         self.config = Some(config);
         Ok(())

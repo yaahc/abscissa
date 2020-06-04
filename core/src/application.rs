@@ -90,7 +90,11 @@ pub trait Application: Default + Sized + 'static {
     /// all components in the registry. This is presently done in the standard
     /// application template, but is not otherwise handled directly by the
     /// framework (as ownership precludes it).
-    fn after_config(&mut self, config: Self::Cfg) -> Result<(), FrameworkError>;
+    fn after_config(
+        &mut self,
+        config: Self::Cfg,
+        command: &Self::Cmd,
+    ) -> Result<(), FrameworkError>;
 
     /// Load this application's configuration and initialize its components.
     fn init(&mut self, command: &Self::Cmd) -> Result<(), FrameworkError> {
@@ -108,7 +112,7 @@ pub trait Application: Default + Sized + 'static {
 
         // Fire callback regardless of whether any config was loaded to
         // in order to signal state in the application lifecycle
-        self.after_config(command.process_config(config)?)?;
+        self.after_config(command.process_config(config)?, command)?;
 
         Ok(())
     }
